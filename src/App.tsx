@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import {
   PhoenixChartData,
   PhoenixChartOptions,
-  DomoPhoenix.MAPPING,
-  DomoPhoenix.DATA_TYPE,
+  MAPPING,
+  DATA_TYPE,
   Chart,
-  DomoPhoenix.CHART_TYPE
+  CHART_TYPE
 } from '@domoinc/domo-phoenix';
 
 interface Props {
@@ -40,19 +40,19 @@ export class App extends Component<Props> {
     ],
     columns: [
       {
-        type: DomoPhoenix.DATA_TYPE.STRING,
+        type: DATA_TYPE.STRING,
         name: 'Order Priority',
-        mapping: DomoPhoenix.MAPPING.SERIES
+        mapping: MAPPING.SERIES
       },
       {
-        type: DomoPhoenix.DATA_TYPE.STRING,
+        type: DATA_TYPE.STRING,
         name: 'Customer Segment',
-        mapping: DomoPhoenix.MAPPING.ITEM
+        mapping: MAPPING.ITEM
       },
       {
-        type: DomoPhoenix.DATA_TYPE.DOUBLE,
+        type: DATA_TYPE.DOUBLE,
         name: 'Sales',
-        mapping: DomoPhoenix.MAPPING.VALUE
+        mapping: MAPPING.VALUE
       }
     ]
   };
@@ -64,7 +64,7 @@ export class App extends Component<Props> {
 
   componentDidMount() {
     const chart = new Chart(
-      DomoPhoenix.CHART_TYPE.BAR,
+      CHART_TYPE.BAR,
       this.data,
       this.options
     );
@@ -81,53 +81,3 @@ export class App extends Component<Props> {
   }
 }
 
-Going Further
-
-At this point you have your chart created and showing on your app. This is a very basic implementation and your own personal implementation is up to your discretion. It is recommended, however, that you create a reusable React component for your charts. An example component may look something like this:
-
-import { Chart, PhoenixChartData, PhoenixChartOptions } from '@domoinc/domo-phoenix';
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-
-export class Chart extends Component<any, any> {
-  constructor(props: any) {
-    super(props);
-  }
-
-  componentDidUpdate() {
-    this.renderChart();
-  }
-
-  componentDidMount() {
-    this.renderChart();
-  }
-
-  renderChart() {
-    const options: PhoenixChartOptions = {
-      width: this.props.width || 900,
-      height: this.props.height || 400,
-      properties: this.props.properties,
-      colors: this.props.colors
-    };
-    const data: PhoenixChartData = {
-      rows: this.props.data,
-      columns: this.props.columns
-    };
-    const chart = new Chart(this.props.type, data, options);
-    const el = ReactDOM.findDOMNode(this);
-    if(el) {
-      if(el.childNodes.length > 0 && el.firstChild) {
-        // Trying to render new chart, remove old chart
-        el.removeChild(el.firstChild);
-      }
-      el.appendChild(chart.canvas);
-      chart.render();
-    }
-  }
-
-  render() {
-    return (
-      <div></div>
-    );
-  }
-}
